@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
@@ -23,7 +24,7 @@ public class GraphicsVB {
         createRaster(parent);
         this.xSize = parent.getWidth();
         this.ySize = parent.getHeight();
-        currentColor = Color.BLACK;
+        currentColor = Color.RED;
     }
 
     public GraphicsVB(BufferedImage parent, Color color){
@@ -38,15 +39,12 @@ public class GraphicsVB {
     }
 
     public void createRaster(BufferedImage parent){
-        DataBufferInt dbb = (DataBufferInt)parent.getRaster().getDataBuffer();
-        data = dbb.getData();
+        DataBufferInt dbi = (DataBufferInt)parent.getRaster().getDataBuffer();
+        data = dbi.getData();
     }
 
     public void setPixel(int x, int y){
-        data[(x+y*getY())*4] = currentColor.getRed();
-        data[(x+y*getY())*4+1] = currentColor.getGreen();
-        data[(x+y*getY())*4+2] = currentColor.getBlue();
-        data[(x+y*getY())*4+3] = currentColor.getAlpha();
+        data[(x+y*getY())] = currentColor.getRGB();
     }
 
     public void setRect(int x, int y, int xs, int ys){
@@ -66,12 +64,13 @@ public class GraphicsVB {
     }
 
     public BufferedImage returnEditedImage(){
-        int[] bitMasks = new int[]{0xFF0000, 0xFF00, 0xFF, 0xFF000000};
+    int[] bitMasks = new int[]{0xFF0000, 0xFF00, 0xFF, 0xFF000000};
     SinglePixelPackedSampleModel sm = new SinglePixelPackedSampleModel(
             DataBuffer.TYPE_INT, xSize, ySize, bitMasks);
     DataBufferInt db = new DataBufferInt(data, data.length);
     WritableRaster wr = Raster.createWritableRaster(sm, db, new Point());
-    return new BufferedImage(ColorModel.getRGBdefault(), wr, false, null);
+    BufferedImage image = new BufferedImage(ColorModel.getRGBdefault(), wr, false, null);
+    return image;
     }
 
     public static void main(String[] args) {
@@ -84,9 +83,9 @@ public class GraphicsVB {
         BufferedImage bi = new BufferedImage(1000, 1000, BufferedImage.TYPE_INT_ARGB);
         GraphicsVB gvb = new GraphicsVB(bi);
         gvb.setPixel(100, 100);
-        gvb.setRect(0, 0, 100, 100);
+        gvb.setRect(100, 100, 10, 10);
         bi = gvb.returnEditedImage();
-        try {Thread.sleep(100);}catch(InterruptedException e){}
+        try {Thread.sleep(10);}catch(InterruptedException e){}
         g.drawImage(bi, 0, 0, null);
     }
 }
