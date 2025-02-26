@@ -1,3 +1,5 @@
+package graphics;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -14,12 +16,17 @@ import javax.swing.JFrame;
 
 public class GraphicsVB {
 
-    private int[] data;
+    protected int[] data;
 
-    private Color currentColor;
+    protected Color currentColor;
 
-    private int xSize;
-    private int ySize;
+    protected int xSize;
+    protected int ySize;
+
+    public GraphicsVB(){
+        currentColor = Color.BLACK;
+        data = new int[xSize*ySize];
+    }
 
     public GraphicsVB(int xSize, int ySize){
         this(xSize, ySize, Color.BLACK);
