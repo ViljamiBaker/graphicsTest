@@ -1,5 +1,24 @@
 package graphics;
+
 public class Matrix {
+
+    // static values
+    public static Matrix IdentityMatrix = new Matrix(new double[][] 
+        {
+            {1,0,0,0},
+            {0,1,0,0},
+            {0,0,1,0},
+            {0,0,0,1}
+        }
+    );
+    public static Matrix matfrompos(double x, double y, double z){
+        Matrix m1 = Matrix.IdentityMatrix;
+        m1.setData(3, 0, x);
+        m1.setData(3, 1, y);
+        m1.setData(3, 2, z);
+        return m1;
+    }
+    // actual obj
     private int rows;
     private int columns;
     private double[][] data;
@@ -11,6 +30,17 @@ public class Matrix {
         for(int c = 0; c<columns; c++){
             for(int r = 0; r<rows; r++){
                 data[r][c] = 0.0;
+            }
+        }
+    }
+
+    public Matrix(double[][] data){
+        this.rows = data.length;
+        this.columns = data[0].length;
+        this.data = new double[rows][columns];
+        for(int c = 0; c<columns; c++){
+            for(int r = 0; r<rows; r++){
+                this.data[r][c] = data[r][c];
             }
         }
     }
@@ -65,7 +95,7 @@ public class Matrix {
         return newMatrix;
     }
 
-    public void setData(int r, int c, Double data){
+    public void setData(int r, int c, double data){
         checkBounds(r, c);
         this.data[r][c] = data;
     }

@@ -1,19 +1,23 @@
 package graphics;
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
 public class Graphics3D extends GraphicsVB {
 
-    Camera camer;
+    Camera camera;
+
+    V3dObject[] objects;
 
     public Graphics3D(int xSize, int ySize, Camera camera){
-        this.xSize = xSize;
-        this.ySize = ySize;
-        this.currentColor = Color.black;
-        this.data = new int[xSize*ySize];
+        super(xSize,ySize);
+        this.camera = camera;
+        this.objects = new V3dObject[]{new V3dObject(Matrix.matfrompos(1, 1, 1))};
+    }
+    public void drawFrame(){
+        for (V3dObject obj : objects) {
+            
+        }
     }
     public static void main(String[] args) {
                 JFrame jf = new JFrame();
@@ -22,21 +26,9 @@ public class Graphics3D extends GraphicsVB {
         jf.setResizable(false);
         jf.setVisible(true);
         Graphics g = jf.getGraphics();
-        Graphics3D gvb = new Graphics3D(1000,1000, new Camera());
-        gvb.setColor(Color.BLACK);
-        gvb.fillRect(0,0,1000,1000);
-        gvb.setColor(Color.BLACK);
-        gvb.fillCircle(100, 100, 100);
-        gvb.drawCircle(400, 400, 100);
-        gvb.drawRect(10, 200, 100, 100);
-        gvb.setColor(Color.red);
-        gvb.fillRect(400, 100, 100, 100);
-        gvb.drawLine(800,800,900,1000);
-        gvb.setPixel(769, 664);
+        Graphics3D g3d = new Graphics3D(1000,1000, new Camera());
         while ( true) {
-            gvb.forget(1000);
-            BufferedImage bi = gvb.returnImage();
-            g.drawImage(bi, 0, 0, null);
+            g3d.drawFrame();
             try {Thread.sleep(10);}catch(InterruptedException e){}
         }
     }
