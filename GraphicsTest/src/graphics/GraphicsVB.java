@@ -20,6 +20,8 @@ public class GraphicsVB {
 
     protected Color currentColor;
 
+    protected Color bgColor;
+
     protected int xSize;
     protected int ySize;
 
@@ -37,6 +39,7 @@ public class GraphicsVB {
         this.ySize = ySize;
         currentColor = color;
         data = new int[xSize*ySize];
+        bgColor = Color.WHITE;
     }
 
     public void setColor(Color c){
@@ -44,10 +47,17 @@ public class GraphicsVB {
     }
 
     public void setPixel(int x, int y){
-        if(x<0||x>=xSize||x<0||y>=ySize){
+        if(x<0||x>=xSize||y<0||y>=ySize){
             return;
         }
         data[x+y*getY()] = currentColor.getRGB();
+    }
+
+    public void setPixel(int x, int y, Color c){
+        if(x<0||x>=xSize||x<0||y>=ySize){
+            return;
+        }
+        data[x+y*getY()] = c.getRGB();
     }
 
     public void fillRect(int x, int y, int xs, int ys){
@@ -91,11 +101,20 @@ public class GraphicsVB {
             }
         }
     }
+    public void clear()
+    {
+        for (int i = 0; i < xSize; i++) {
+            for (int j = 0; j < ySize; j++) {
+                setPixel(i, j, bgColor);
+            }
+        }
+    }
 
     public void drawCircle(int xCenter, int yCenter, int radius)
     {
         circle(xCenter, yCenter, radius, false);
     }
+
     public void fillCircle(int xCenter, int yCenter, int radius)
     {
         circle(xCenter, yCenter, radius, true);

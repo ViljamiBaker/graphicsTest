@@ -19,4 +19,8 @@ public class Point {
         double z1 = d[3][2];
         return new Point(x1, y1, z1);
     }
+
+    public double magnitude(){
+        return Math.sqrt(x*x+y*y+z*z);
+    }
 }
