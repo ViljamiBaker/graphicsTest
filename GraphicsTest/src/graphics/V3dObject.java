@@ -1,12 +1,12 @@
 package graphics;
 
 public class V3dObject {
-    Matrix pose;
+    Point3 pose;
 
     public V3dObject(){
-        this(Matrix.matfrompos(0, 0, 0));
+        this(new Point3());
     }
-    public V3dObject(Matrix pose){
+    public V3dObject(Point3 pose){
         this.pose = pose;
     }    
 }

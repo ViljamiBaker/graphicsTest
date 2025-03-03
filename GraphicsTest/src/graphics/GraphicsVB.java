@@ -25,21 +25,19 @@ public class GraphicsVB {
     protected int xSize;
     protected int ySize;
 
-    public GraphicsVB(){
-        currentColor = Color.BLACK;
-        data = new int[xSize*ySize];
+    protected boolean flipped;
+
+    public GraphicsVB(int xSize, int ySize, boolean flipped){
+        this(xSize, ySize, Color.BLACK, flipped);
     }
 
-    public GraphicsVB(int xSize, int ySize){
-        this(xSize, ySize, Color.BLACK);
-    }
-
-    public GraphicsVB(int xSize, int ySize, Color color){
+    public GraphicsVB(int xSize, int ySize, Color color, boolean flipped){
         this.xSize = xSize;
         this.ySize = ySize;
         currentColor = color;
         data = new int[xSize*ySize];
         bgColor = Color.WHITE;
+        this.flipped = flipped;
     }
 
     public void setColor(Color c){
@@ -47,17 +45,14 @@ public class GraphicsVB {
     }
 
     public void setPixel(int x, int y){
-        if(x<0||x>=xSize||y<0||y>=ySize){
-            return;
-        }
-        data[x+y*getY()] = currentColor.getRGB();
+        setPixel(x,y,currentColor);
     }
 
     public void setPixel(int x, int y, Color c){
-        if(x<0||x>=xSize||x<0||y>=ySize){
+        if(x<0||x>=xSize||y<0||y>=ySize){
             return;
         }
-        data[x+y*getY()] = c.getRGB();
+        data[x+(flipped? getY()-1-y : y)*getY()] = c.getRGB();
     }
 
     public void fillRect(int x, int y, int xs, int ys){
@@ -184,7 +179,7 @@ public class GraphicsVB {
         jf.setResizable(false);
         jf.setVisible(true);
         Graphics g = jf.getGraphics();
-        GraphicsVB gvb = new GraphicsVB(1000,1000);
+        GraphicsVB gvb = new GraphicsVB(1000,1000,false);
         gvb.setColor(Color.BLACK);
         gvb.fillRect(0,0,1000,1000);
         gvb.setColor(Color.BLACK);

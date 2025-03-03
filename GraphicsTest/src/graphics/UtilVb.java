@@ -48,22 +48,13 @@ public class UtilVb {
         Matrix m2 = scaleMatrix(x, y, z);
         return m1.add(m2);
     }
-    public static Point applyMatrix(Point p1, Matrix m1){
-        double[][] d = m1.getData();
-        Point p2 = new Point(
-            (p1.x*d[0][0])+(p1.x*d[1][0])+(p1.x*d[2][0])+(d[3][0]), 
-            (p1.y*d[0][1])+(p1.y*d[1][1])+(p1.y*d[2][1])+(d[3][1]),  
-            (p1.z*d[0][2])+(p1.z*d[1][2])+(p1.z*d[2][2])+(d[3][2])
-        );
-        return Point.fromMatrix(p1.toMatrix().multiply(m1));
-    }
-    public static Matrix createTranslateMatrix(Point txyz){
+    public static Matrix createTranslateMatrix(Point3 txyz){
         return translateMatrix(txyz.x, txyz.y, txyz.z);
     }
-    public static Matrix createScaleMatrix(Point scale){
+    public static Matrix createScaleMatrix(Point3 scale){
         return scaleMatrix(scale.x, scale.y, scale.z);
     }
-    public static Matrix createRotateMatrix(Point axis, double theta){
+    public static Matrix createRotateMatrix(Point3 axis, double theta){
         return rotateMatrix(axis.x, axis.y, axis.z, theta);
     }
 }

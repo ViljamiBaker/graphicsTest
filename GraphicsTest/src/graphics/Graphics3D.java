@@ -1,5 +1,7 @@
 package graphics;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 
 import javax.swing.JFrame;
 
@@ -11,23 +13,40 @@ public class Graphics3D extends GraphicsVB {
 
     private V3dObject[] objects;
 
+    private Triangle[] triangles;
+
     public Graphics3D(int xSize, int ySize, Camera camera){
-        super(xSize,ySize);
+        super(xSize,ySize, true);
         this.camera = camera;
-        this.objects = new V3dObject[]{new V3dObject(Matrix.matfrompos(0, 0, 5))};
+        this.objects = new V3dObject[]{new V3dObject(new Point3(0, 0, 1))};
+        this.triangles = new Triangle[]{new Triangle(new Point3(0, 1, 1),new Point3(1, 0, 1),new Point3(0, 0, 1), Color.BLACK)};
         this.worldMatrix = Matrix.IdentityMatrix;
+    }
+    private boolean edgeFunction(Point3 p0, Point3 p1, Point3 P){
+        return ((P.x - p0.x) * (p1.y - p0.y) - (P.y - p0.y) * (p1.x - p0.x) >= 0);
     }
     public void drawFrame(){
         clear();
-        for (V3dObject obj : objects) {
-            Point p = Point.fromMatrix(obj.pose.multiply(camera.pose.scalarMult(-1)));
-            double pprimex = p.x/p.z;
-            double pprimey = p.y/p.z;
-            Point p2 = Point.fromMatrix(obj.pose.add(UtilVb.createTranslateMatrix(new Point(1000, 0, 0))).multiply(camera.pose.scalarMult(-1)));
-            double pprimex2 = p2.x/p2.z;
-            double pprimey2 = p2.y/p2.z;
-            fillCircle((int)pprimex, (int)pprimey, (int)Math.sqrt(Math.pow(pprimex-pprimex2,2) + Math.pow(pprimey-pprimey2,2)));
-            obj.pose = obj.pose.add(UtilVb.createTranslateMatrix(new Point(0, 0, -0.01)));
+        for (Triangle tri : triangles) {
+            Point3 p0 = camera.transform(tri.p0);
+            Point3 p1 = camera.transform(tri.p1);
+            Point3 p2 = camera.transform(tri.p2);
+            
+            for(int x = 0; x < getX(); x++){
+                for(int y = 0; y < getX(); y++){
+                    Point3 P = new Point3(x,y,0).multiply(1/getX());
+                    if(edgeFunction(p0, p1, P)&&edgeFunction(p1, p2, P)&&edgeFunction(p2, p0, P)){
+                        setPixel(x, y, tri.color);
+                    }
+                }
+            }
+            /*
+                Point3 p1 = camera.transform(obj.pose);
+                Point3 p2 = camera.transform(obj.pose.add(new Point3(0, 3, 0)));
+                fillCircle((int)p1.x*getX()+getX()/2, (int)p1.y*getY()+getX()/2, (int)(p2.y-p1.y));
+                obj.pose = obj.pose.add(new Point3(0, 0, -0.01));
+                System.out.println(p1.z);
+            */
         }
     }
     public static void main(String[] args) {
