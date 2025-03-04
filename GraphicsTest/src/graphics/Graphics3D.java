@@ -17,7 +17,7 @@ public class Graphics3D extends GraphicsVB {
         super(xSize,ySize, true);
         this.camera = camera;
         this.objects = new V3dObject[]{new V3dObject(new Point3(0, 0, 1))};
-        this.triangles = new Triangle[]{new Triangle(new Point3(0.1, 1, 1),new Point3(1, 0.1, 1),new Point3(0.1, 0.1, 1), Color.BLACK)};
+        this.triangles = new Triangle[]{new Triangle(new Point3(10, 10, -1),new Point3(10, 0, -1),new Point3(-10, -10, -1), Color.BLACK)};
     }
     private boolean edgeFunction(Point3 p0, Point3 p1, Point3 P){
         return ((P.x - p0.x) * (p1.y - p0.y) - (P.y - p0.y) * (p1.x - p0.x) >= 0);
@@ -31,14 +31,16 @@ public class Graphics3D extends GraphicsVB {
             
             for(int x = 0; x < getX(); x++){
                 for(int y = 0; y < getX(); y++){
-                    Point3 P = new Point3(x,y,0).multiply(1/getX());
-                    if(edgeFunction(p0, p1, P))System.out.println(x);
+                    Point3 P = new Point3(x,y,0).multiply(2.0/getX()-1.0);
+                    if(edgeFunction(p0, p1, P))setPixel(x, y, Color.RED);
+                    if(edgeFunction(p1, p2, P))setPixel(x, y, Color.BLUE);
+                    if(edgeFunction(p2, p0, P))setPixel(x, y, Color.GREEN);
                     if(edgeFunction(p0, p1, P)&&edgeFunction(p1, p2, P)&&edgeFunction(p2, p0, P)){
-                        System.out.println(x);
                         setPixel(x, y, tri.color);
                     }
                 }
             }
+            tri.p1.x++;
             /*
                 Point3 p1 = camera.transform(obj.pose);
                 Point3 p2 = camera.transform(obj.pose.add(new Point3(0, 3, 0)));
