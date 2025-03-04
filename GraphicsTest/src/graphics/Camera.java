@@ -22,7 +22,6 @@ public class Camera {
         }
         );
         Point3 pt = p.applyMatrix(t);
-        System.out.println(t.getData()[0][0] * p.x + t.getData()[1][0] * p.y + t.getData()[2][0] * p.z + t.getData()[3][0]);
         return pt;
     }
 }
