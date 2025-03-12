@@ -72,13 +72,32 @@ public class GraphicsVB {
         drawLine(x2,y2,x3,y3);
         drawLine(x3,y3,x1,y1);
     }
-
+    //https://www.sunshine2k.de/coding/java/TriangleRasterization/TriangleRasterization.html
     public void fillTri(int x1, int y1,int x2, int y2,int x3, int y3){
-        double l1Length = Math.sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2));
-        for (double t = 0; t < 1; t+=1/l1Length/3) {
-            Vector2D p1 = UtilVB.interpPoints(new Vector2D(x1, y1), new Vector2D(x2,y2), t);
-            Vector2D p2 = UtilVB.interpPoints(new Vector2D(x1, y1), new Vector2D(x3,y3), t);
-            drawLine((int)p1.x, (int)p1.y, (int)p2.x, (int)p2.y);
+        /* get the bounding box of the triangle */
+        int maxX = Math.max(x1, Math.max(x2, x3));
+        int minX = Math.min(x1, Math.min(x2, x3));
+        int maxY = Math.max(y1, Math.max(y2, y3));
+        int minY = Math.min(y1, Math.min(y2, y3));
+
+        /* spanning vectors of edge (v1,v2) and (v1,v3) */
+        Vector2D vs1 = new Vector2D(x2 - x1, y2 - y1);
+        Vector2D vs2 = new Vector2D(x3 - x1, y3 - y1);
+
+        for (int x = minX; x <= maxX; x++)
+        {
+        for (int y = minY; y <= maxY; y++)
+        {
+            Vector2D q = new Vector2D(x - x1, y - y1);
+
+            float s = (float)crossProduct(q, vs2) / crossProduct(vs1, vs2);
+            float t = (float)crossProduct(vs1, q) / crossProduct(vs1, vs2);
+
+            if ( (s >= 0) && (t >= 0) && (s + t <= 1))
+            { /* inside triangle */
+            drawPixel(x, y);
+            }
+        }
         }
     }
 
