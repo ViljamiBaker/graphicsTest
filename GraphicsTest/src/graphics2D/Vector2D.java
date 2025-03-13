@@ -59,6 +59,9 @@ public class Vector2D {
    public Vector2D rotateBy(VectorMD other){
       return new Vector2D(this.x*Math.sin(other.D),this.y*Math.cos(other.D));
    }
+   public double crossProduct(Vector2D other){
+      return this.x * other.y - this.y * other.x;
+   }
    @Override
    public String toString(){
       return "X: " + x + " Y: " + y;

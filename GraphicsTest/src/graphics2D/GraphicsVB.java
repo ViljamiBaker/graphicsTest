@@ -90,12 +90,12 @@ public class GraphicsVB {
         {
             Vector2D q = new Vector2D(x - x1, y - y1);
 
-            float s = (float)crossProduct(q, vs2) / crossProduct(vs1, vs2);
-            float t = (float)crossProduct(vs1, q) / crossProduct(vs1, vs2);
+            double s = q.crossProduct(vs2) / vs1.crossProduct(vs2);
+            double t = vs1.crossProduct(q) / vs1.crossProduct(vs2);
 
             if ( (s >= 0) && (t >= 0) && (s + t <= 1))
             { /* inside triangle */
-            drawPixel(x, y);
+                setPixel(x, y);
             }
         }
         }
@@ -201,13 +201,13 @@ public class GraphicsVB {
     }
 
     public BufferedImage returnImage(){
-    int[] bitMasks = new int[]{0xFF0000, 0xFF00, 0xFF, 0xFF000000};
-    SinglePixelPackedSampleModel sm = new SinglePixelPackedSampleModel(
+        int[] bitMasks = new int[]{0xFF0000, 0xFF00, 0xFF, 0xFF000000};
+        SinglePixelPackedSampleModel sm = new SinglePixelPackedSampleModel(
             DataBuffer.TYPE_INT, xSize, ySize, bitMasks);
-    DataBufferInt db = new DataBufferInt(data, data.length);
-    WritableRaster wr = Raster.createWritableRaster(sm, db, new Point());
-    BufferedImage image = new BufferedImage(ColorModel.getRGBdefault(), wr, false, null);
-    return image;
+        DataBufferInt db = new DataBufferInt(data, data.length);
+        WritableRaster wr = Raster.createWritableRaster(sm, db, new Point());
+        BufferedImage image = new BufferedImage(ColorModel.getRGBdefault(), wr, false, null);
+        return image;
     }
 
     public static void main(String[] args) {
@@ -230,7 +230,7 @@ public class GraphicsVB {
         gvb.setPixel(769, 664);
         gvb.setColor(Color.GREEN);
         gvb.fillTri(100, 150, 200, 350,150, 600);
-        while ( true) {
+        while (true) {
             //gvb.forget(1000);
             BufferedImage bi = gvb.returnImage();
             g.drawImage(bi, 0, 0, null);
