@@ -67,6 +67,26 @@ public class GraphicsVB {
         }
     }
 
+    public void drawPoly(int[] x, int[] y){
+        if(x.length!=y.length){
+            throw new IllegalArgumentException("x length not equal to y length x:" + x + " y:" + y);
+        }
+        for (int i = 0; i < x.length-1; i++) {
+            drawLine(x[i],y[i],x[i+1],y[i+1]);
+        }
+        drawLine(x[0],y[0],x[x.length-1],y[y.length-1]);
+    }
+    // completely incapable of doing convex polygons :(    
+    public void fillPoly(int[] x, int[] y){
+        if(x.length!=y.length){
+            throw new IllegalArgumentException("x length not equal to y length x:" + x + " y:" + y);
+        }
+        for (int i = 0; i < x.length-2; i++) {
+            fillTri(x[i], y[i], x[i+1], y[i+1], x[i+2], y[i+2]);
+        }
+        fillTri(x[0], y[0], x[1], y[1], x[x.length-1], y[x.length-1]);
+    }
+
     public void drawTri(int x1, int y1,int x2, int y2,int x3, int y3){
         drawLine(x1,y1,x2,y2);
         drawLine(x2,y2,x3,y3);
@@ -128,7 +148,7 @@ public class GraphicsVB {
                 setPixel(x,ty1);
             }
         }else{
-            double m = (ty2-ty1)/(tx2-tx1);
+            double m = ((double)(ty2-ty1))/(double)(tx2-tx1);
             for (int x = tx1; x < tx2; x++) {
                 setPixel(x,(int)(m*(x-tx1)+ty1));
             }
@@ -218,11 +238,11 @@ public class GraphicsVB {
         jf.setVisible(true);
         Graphics g = jf.getGraphics();
         GraphicsVB gvb = new GraphicsVB(1000,1000,false);
+        gvb.clear();
         gvb.setColor(Color.BLACK);
         gvb.fillRect(0,0,1000,1000);
-        gvb.setColor(Color.BLACK);
+        gvb.setColor(Color.BLUE);
         gvb.fillCircle(100, 100, 100);
-        gvb.drawCircle(400, 400, 100);
         gvb.drawRect(10, 200, 100, 100);
         gvb.setColor(Color.red);
         gvb.fillRect(400, 100, 100, 100);
@@ -230,6 +250,9 @@ public class GraphicsVB {
         gvb.setPixel(769, 664);
         gvb.setColor(Color.GREEN);
         gvb.fillTri(100, 150, 200, 350,150, 600);
+        gvb.fillPoly(new int[]{200,300,400,250}, new int[]{200,200,400,300});
+        gvb.setColor(Color.RED);
+        gvb.drawPoly(new int[]{200,300,400,250}, new int[]{200,200,400,300});
         while (true) {
             //gvb.forget(1000);
             BufferedImage bi = gvb.returnImage();

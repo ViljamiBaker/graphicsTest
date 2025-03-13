@@ -25,6 +25,18 @@ public class Graphics2V extends GraphicsVB {
         return camera;
     }
 
+    @Override
+    public void setPixel(int x, int y, Color c){
+        Vector2D xy = new Vector2D(x, y);
+        xy = camera.convertVec2D(xy, center);
+        int xt = (int)xy.x;
+        int yt = (int)xy.y;
+        if(xt<0||xt>=xSize||yt<0||yt>=ySize){
+            return;
+        }
+        data[xt+(flipped? getY()-1-yt : yt)*getY()] = c.getRGB();
+    }
+
 
 
     public static void main(String[] args) {
