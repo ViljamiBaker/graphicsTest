@@ -25,6 +25,10 @@ public class VFrame extends JFrame{
     }
     @Override
     public void paint(Graphics g){
-        g.drawImage(g2v.returnImage(), 0, 0, null);
+        try {
+            g.drawImage(g2v.returnImage(), 0, 0, null);
+        } catch (NullPointerException e) {
+            // if g2v hasnt been made yet
+        }
     }
 }
